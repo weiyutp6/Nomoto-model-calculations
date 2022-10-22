@@ -14,7 +14,7 @@ eqns = [eqn1 eqn2 eqn3];
 s = solve(eqns,[t1 t2 k]);
 t1 = vpa(s.t1(1));
 t2 = vpa(s.t2(1));
-t3 = b0/b1;
+t3 = vpa(b0/b1);
 k = vpa(s.k(1));
 nomoto_coefficients = [t1;t2;t3;k]
 save('nomoto_coef.mat','nomoto_coefficients')
