@@ -104,13 +104,13 @@ end
 % save('turnUpToRight180.mat', 'turn180coords');
 % turn90coords = rotation90*turn90coords;
 % turn180coords = rotation90*turn180coords;
-% save('turnRightToDown90.mat', 'turn90coords');
-% save('turnRightToDown180.mat', 'turn180coords');
+% save('turnLeftToUp90.mat', 'turn90coords');
+% save('turnLeftToUp180.mat', 'turn180coords');
 % turn90coords = rotation90*turn90coords;
 % turn180coords = rotation90*turn180coords;
 % save('turnDownToLeft90.mat', 'turn90coords');
 % save('turnDownToLeft180.mat', 'turn180coords');
 % turn90coords = rotation90*turn90coords;
 % turn180coords = rotation90*turn180coords;
-% save('turnLeftToUp90.mat', 'turn90coords');
-% save('turnLeftToUp180.mat', 'turn180coords');
+% save('turnRightToDown90.mat', 'turn90coords');
+% save('turnRightToDown180.mat', 'turn180coords');
