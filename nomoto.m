@@ -4,7 +4,8 @@ t2 = 0.3179;
 t3 = 0.183;
 gain = 10;
 g = gain*tf([k*t3 k], [t1*t2 t1+t2 1 0]);
-t = 0:0.01:20;
+Ts = 1;
+% t = 0:Ts:20;
 rotation90 = [0 -1;1 0];
 leftturn = pi/12;
 rightturn = -pi/12;
@@ -16,19 +17,23 @@ transtime = 4;
 %in = [rightturn*ones(size(t1)) pi/12/transtime*(btw-timing) leftturn*ones(size(t2))];
 t1 = 0:0.01:timing;
 t2 = timing+0.01:0.01:20;
-in = [rightturn*ones(size(t1)) leftturn*ones(size(t2))];
-%in = pi/12*ones(size(t));
+% in = [rightturn*ones(size(t1)) leftturn*ones(size(t2))];
+% in = -pi/12*ones(size(t));
+% in = zeros(size(t));
+load('signal.mat','newArray');
+in = newArray;
+t = 0:length(in)-1;
 out = lsim(g,in,t);
 deriv = zeros(size(t));
 for i = 2:length(t)
-    deriv(i)=(out(i)-out(i-1))/0.01;
+    deriv(i)=(out(i)-out(i-1))/Ts;
 end
 save('input.mat', 'in');
 save('output.mat', 'out');
 save('derivative.mat', 'deriv');
 % plot(t,deriv)
-longchange = cos(out)*0.05;
-latchange = sin(out)*0.05;
+longchange = cos(out)*Ts;
+latchange = sin(out)*Ts;
 y = zeros(1,length(longchange));
 x = zeros(1,length(latchange));
 for i = 2:length(out)
@@ -43,7 +48,7 @@ tactical_rad = find(out == min(abs(out+pi))-pi);
 if isempty(tactical_rad)
     tactical_rad = find(out == -min(abs(out+pi))-pi);
 end
-%plot(x(1:tactical_rad),y(1:tactical_rad))
+plot(x,y)
 %plot(0:0.01:(tactical_rad-1)/100, in(1:tactical_rad))
 % plot(0:0.01:(tactical_rad-1)/100, out(1:tactical_rad))
 % title('u turn counterclockwise yaw');
@@ -96,6 +101,7 @@ end
 % plot(0:0.01:(advance-1)/100, y(1:advance))
 % plot(x(1:tactical_rad),y(1:tactical_rad),'-s','MarkerIndices',[advance tactical_rad], 'MarkerFaceColor','red','MarkerSize',15)
 % plot(t,out)
+% save("tf.mat", "out");
 
 % save each type of turn as .mat
 % turn180coords = [-x(1:tactical_rad);y(1:tactical_rad)];
