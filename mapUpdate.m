@@ -1,7 +1,7 @@
 function [r, map] = mapUpdate(x,y,mapSize)
     file = load("map.mat");
     mapMat = file.mapMatrix;
-    mapMatrix = zeros(mapSize,mapSize);
+    mapMatrix = 10*ones(mapSize,mapSize);
     % change training map to remove oysters from a coord
     try
         r = int(mapMat(x,y));

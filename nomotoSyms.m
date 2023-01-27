@@ -4,7 +4,7 @@ k = -0.1724;
 t1 = 2.0875;
 t2 = 0.3179;
 t3 = 0.183;
-gain = 10;
+gain = 60;
 
 % create symbolic parameters
 syms s

@@ -1,4 +1,4 @@
-function [x,y,currentTime] = nomotoSim(angle)
+function [x,y] = nomotoSim(angle)
     %% load current full input signal
     s = load("signal.mat");
     currentSignal = s.newArray;
@@ -10,16 +10,16 @@ function [x,y,currentTime] = nomotoSim(angle)
     t1 = 2.0875;
     t2 = 0.3179;
     t3 = 0.183;
-    gain = 10;
+    gain = 60;
 
     % create symbolic parameters
-    syms s
+    syms s t
     tSize = length(newArray);
     f = newArray;
     F = 0;
 
     % z transform of input to laplace (tustin approximation)
-    z = (1+s/2)/(1-s/2);
+    z = exp(s);
     for i = 1:tSize
         F = F + f(i)/z^(i-1);
     end
@@ -29,7 +29,6 @@ function [x,y,currentTime] = nomotoSim(angle)
     Output = F*sys;
     out = ilaplace(Output);
     yawMat = zeros(tSize);
-    syms t
 
     % inverse laplace
     for i = 1:tSize
@@ -47,9 +46,23 @@ function [x,y,currentTime] = nomotoSim(angle)
         xout(i) = xout(i-1) + latchange(i-1);
     end
 
+%     %% Nomoto model with control systems toolbox
+%     g = gain*tf([k*t3 k], [t1*t2 t1+t2 1 0]);
+%     Ts = 1;
+%     t = 0:Ts:length(newArray)-1;
+%     out = lsim(g,newArray,t);
+%     longchange = cos(out)*Ts;
+%     latchange = sin(out)*Ts;
+%     y = zeros(1,length(longchange));
+%     x = zeros(1,length(latchange));
+%     for i = 2:length(out)
+%         y(i) = y(i-1) + longchange(i-1);
+%         x(i) = x(i-1) + latchange(i-1);
+%     end
+
     %% output current coordinates and run time
-    currentTime = tSize;
     x = -xout(length(xout));
     y = yout(length(yout));
+    save("theoretical.mat","xout","yout");
     save("signal.mat","newArray");
 end
