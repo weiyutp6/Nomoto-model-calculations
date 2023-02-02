@@ -1,6 +1,7 @@
 %% model parameters
 Ts = 1;
 mapSize = 10;
+maxStep = 9;
 
 %% map creation and load simulink model
 mdl = 'rlattempt1';
@@ -28,7 +29,7 @@ env.ResetFcn = @(in)localResetFcn(in);
 nI = observationInfo.Dimension(1);  % number of inputs (2)
 nL = 12;                            % number of neurons for each layer
 nO = numel(actionInfo.Elements);    % number of outputs (16)
-
+W0 = ones();
 dnn = [
     featureInputLayer(nI,'Normalization','none','Name','state')
     fullyConnectedLayer(nL,'Name','fc1')
@@ -41,7 +42,6 @@ dnn = [
 dnn = dlnetwork(dnn);
 
 %% define training parameters
-% W0 = ones();
 criticOptions = rlOptimizerOptions('LearnRate',1e-4,...
     'GradientThreshold',1,'L2RegularizationFactor',1e-4);
 critic = rlVectorQValueFunction(dnn,observationInfo,actionInfo,...
@@ -58,7 +58,7 @@ agent = rlDQNAgent(critic, agentOpts);
 
 trainOpts = rlTrainingOptions(...
     'MaxEpisodes', 5000, ...
-    'MaxStepsPerEpisode', 10, ...
+    'MaxStepsPerEpisode', maxStep, ...
     'Verbose', true, ...
     'Plots','training-progress',...
     'StopTrainingCriteria','EpisodeReward',...
@@ -77,11 +77,14 @@ if doTraining
     save("trainingResult.mat",'trainingStats')
 else
     load('savedAgents\Agent5000.mat','savedAgentResult');
-%     load("savedAgents\Agent5000.mat",'saved_agent')
+    load("savedAgents\Agent5000.mat",'saved_agent');
 %     load('trainingResult.mat','trainingStats');
-    inspectTrainingResult(savedAgentResult)
+%     inspectTrainingResult(savedAgentResult)
 end
-simOptions = rlSimulationOptions('MaxSteps',60);
+simOptions = rlSimulationOptions('MaxSteps',maxStep);
 experience = sim(env,agent,simOptions);
 
 totalReward = sum(experience.Reward)
+% if totalReward >= 300
+%     movefile path.mat path300up.mat
+% end

@@ -4,13 +4,14 @@ t2 = 0.3179;
 t3 = 0.183;
 gain = 10;
 g = gain*tf([k*t3 k], [t1*t2 t1+t2 1 0]);
-Ts = 1;
+Ts = 0.1;
 t = 0:Ts:20;
 rotation90 = [0 -1;1 0];
 leftturn = pi/12;
 rightturn = -pi/12;
 timing = 3.3;
 transtime = 4;
+bode(g)
 %t1 = 0:0.01:timing-transtime;
 %btw = timing-transtime+0.01:0.01:timing+transtime;
 %t2 = timing+transtime+0.01:0.01:20;
@@ -48,10 +49,12 @@ tactical_rad = find(out == min(abs(out+pi))-pi);
 if isempty(tactical_rad)
     tactical_rad = find(out == -min(abs(out+pi))-pi);
 end
-plot(x,y)
+% plot(x,y)
 %plot(0:0.01:(tactical_rad-1)/100, in(1:tactical_rad))
 % plot(0:0.01:(tactical_rad-1)/100, out(1:tactical_rad))
 % title('u turn counterclockwise yaw');
+% plot(0:0.1:20,out)
+% title("constant 15 degree turn")
 % xlabel('time(s)');
 % ylabel('yaw(rad)');
 % input = in(1:tactical_rad);

@@ -12,6 +12,6 @@ function mapReset()
     x = [];
     y = [];
     save('path.mat','x','y');
-    angle = [];
-    save('angle.mat',"angle");
+    anglePrevious = [];
+    save('angle.mat',"anglePrevious");
 end

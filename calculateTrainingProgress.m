@@ -23,7 +23,8 @@ end
 lengthv = idivide(int16(length(rewards)),12,'ceil');
 subplot(1,2,1);
 plot(1:lengthv, average);
+title("average per set of weights")
 subplot(1,2,2);
 plot(1:lengthv, stddev);
-
+title("std per set of weights")
     

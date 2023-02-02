@@ -16,6 +16,7 @@ function visualizer(x,y,mapSize,angle)
     x = xmat;
     y = ymat;
     save('path.mat','x','y');
-    angle = [];
-    save("angle.mat","angle");
+    file = load("angle.mat");
+    anglePrevious = [file.anglePrevious angle];
+    save("angle.mat", "anglePrevious");
 end
