@@ -1,7 +1,7 @@
 %% model parameters
 Ts = 1;
 mapSize = 10;
-maxStep = 9;
+maxStep = 60;
 
 %% map creation and load simulink model
 mdl = 'rlattempt1';
@@ -70,13 +70,15 @@ trainOpts = rlTrainingOptions(...
 trainOpts.ParallelizationOptions.Mode = 'sync';
 
 %% training
-doTraining = false;
+doTraining = true;
 if doTraining
     delete("savedAgents\*.mat")
     trainingStats = train(agent,env,trainOpts);
     save("trainingResult.mat",'trainingStats')
+    save("savedAgents/finalAgent.mat",'agent')
 else
-    load('savedAgents\Agent5000.mat','savedAgentResult');
+%     load("savedAgents\finalAgent.mat",'agent')
+%     load('savedAgents\Agent5000.mat','savedAgentResult');
     load("savedAgents\Agent5000.mat",'saved_agent');
 %     load('trainingResult.mat','trainingStats');
 %     inspectTrainingResult(savedAgentResult)

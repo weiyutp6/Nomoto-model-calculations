@@ -4,22 +4,17 @@ t2 = 0.3179;
 t3 = 0.183;
 gain = 10;
 g = gain*tf([k*t3 k], [t1*t2 t1+t2 1 0]);
-Ts = 0.1;
+Ts = 1;
 t = 0:Ts:20;
 rotation90 = [0 -1;1 0];
 leftturn = pi/12;
 rightturn = -pi/12;
 timing = 3.3;
 transtime = 4;
-bode(g)
-%t1 = 0:0.01:timing-transtime;
-%btw = timing-transtime+0.01:0.01:timing+transtime;
-%t2 = timing+transtime+0.01:0.01:20;
-%in = [rightturn*ones(size(t1)) pi/12/transtime*(btw-timing) leftturn*ones(size(t2))];
-t1 = 0:0.01:timing;
-t2 = timing+0.01:0.01:20;
-% in = [rightturn*ones(size(t1)) leftturn*ones(size(t2))];
-in = -pi/12*ones(size(t));
+t1 = 0:7;
+t2 = 8:20;
+in = [rightturn*ones(size(t1)) zeros(size(t2))];
+% in = -pi/12*ones(size(t));
 % in = zeros(size(t));
 % load('signal.mat','newArray');
 % in = newArray;
@@ -41,15 +36,17 @@ for i = 2:length(out)
     y(i) = y(i-1) + longchange(i-1);
     x(i) = x(i-1) + latchange(i-1);
 end
-advance = find(out == min(abs(out+pi/2))-pi/2);
+min(abs(out-pi/2))
+advance = find(out-pi/2 == min(abs(out-pi/2)));
 if isempty(advance)
-    advance = find(out == -min(abs(out+pi/2))-pi/2);
+    advance = find((out-pi/2) == -min(abs(out-pi/2)));
 end
-tactical_rad = find(out == min(abs(out+pi))-pi);
+
+tactical_rad = find(out-pi == min(abs(out-pi)));
 if isempty(tactical_rad)
-    tactical_rad = find(out == -min(abs(out+pi))-pi);
+    tactical_rad = find(out-pi == -min(abs(out-pi)));
 end
-% plot(x,y)
+plot(x,y)
 %plot(0:0.01:(tactical_rad-1)/100, in(1:tactical_rad))
 % plot(0:0.01:(tactical_rad-1)/100, out(1:tactical_rad))
 % title('u turn counterclockwise yaw');
@@ -68,7 +65,7 @@ end
 % tacticalout = out(1:stopping);
 % save('Uturnyaw.mat','tacticalout')
 % plot(0:0.01:((stopping-1)/100),tacticalout')
-% plot(x(1:tactical_rad),y(1:tactical_rad))
+% plot(x(1:advance),y(1:advance))
 % plot(t,out)
 
 % save u turn output as .mat

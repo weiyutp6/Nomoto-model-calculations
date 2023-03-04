@@ -18,7 +18,7 @@ function [x,y] = nomotoSim(angle)
     f = newArray;
     F = 0;
 
-    % z transform of input to laplace (tustin approximation)
+    % z transform of input to laplace (z to laplace transformation) (prev:tustin approximation)
     z = exp(s);
     for i = 1:tSize
         F = F + f(i)/z^(i-1);
